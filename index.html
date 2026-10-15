@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanyada Laorong | Personal & Academic Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Sarabun', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#131e32',
+                            950: '#0b0f17'
+                        },
+                        brand: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            500: '#0f172a',
+                            600: '#020617',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        .glass-header {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .minimal-card {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .minimal-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-sans antialiased selection:bg-slate-900 selection:text-white dark:selection:bg-slate-100 dark:selection:text-slate-900 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-5 py-3.5 rounded-2xl shadow-2xl flex items-center space-x-3 pointer-events-none border border-slate-700/50 dark:border-slate-300/50">
+        <i class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600 text-lg"></i>
+        <span id="toast-message" class="text-sm font-medium">คัดลอกเรียบร้อยแล้ว</span>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full glass-header bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors duration-300">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 flex items-center justify-center font-bold text-base shadow-sm group-hover:scale-105 transition-transform">
+                    KL
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-slate-900 dark:text-white text-base leading-tight tracking-tight">Kanyada Laorong</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400">กาญญาภา เหล่าโรง (แจน)</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                <a href="#about" class="px-3 py-2 rounded-lg hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors">เกี่ยวกับ</a>
+                <a href="#education" class="px-3 py-2 rounded-lg hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors">การศึกษา</a>
+                <a href="#experience" class="px-3 py-2 rounded-lg hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors">ประสบการณ์</a>
+                <a href="#skills" class="px-3 py-2 rounded-lg hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors">ทักษะ</a>
+                <a href="#contact" class="px-3 py-2 rounded-lg hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors">ติดต่อ</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" type="button" aria-label="Toggle Theme" class="p-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none">
+                    <i id="theme-toggle-dark-icon" class="hidden fa-solid fa-moon text-lg"></i>
+                    <i id="theme-toggle-light-icon" class="hidden fa-solid fa-sun text-lg text-amber-400"></i>
+                </button>
+
+                <!-- Quick Contact Button -->
+                <button onclick="copyEmail()" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs font-semibold rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 transition-all shadow-sm">
+                    <i class="fa-solid fa-envelope mr-2"></i> ติดต่ออีเมล
+                </button>
+
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" type="button" aria-label="Open Mobile Menu" class="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 px-4 pt-2 pb-4 space-y-1">
+            <a href="#about" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">เกี่ยวกับ</a>
+            <a href="#education" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">ประวัติการศึกษา</a>
+            <a href="#experience" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">ประสบการณ์และกิจกรรม</a>
+            <a href="#skills" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">ทักษะและความสามารถ</a>
+            <a href="#contact" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">ช่องทางการติดต่อ</a>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-16 md:space-y-24">
+
+        <!-- Hero / About Section -->
+        <section id="about" class="pt-4">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+                
+                <!-- Profile Card Column -->
+                <div class="md:col-span-5 flex flex-col items-center text-center">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-slate-400 to-slate-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-300"></div>
+                        <div class="relative w-52 h-64 sm:w-60 sm:h-72 rounded-2xl overflow-hidden border-2 border-white dark:border-slate-800 shadow-xl bg-slate-200 dark:bg-slate-800">
+                            <!-- Visual Profile Image Placeholder -->
+                            <img class="w-full h-full object-cover object-top" 
+                                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600" 
+                                 alt="กาญญาภา เหล่าโรง (แจน)"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/600x800/1e293b/ffffff?text=Kanyada+L.';">
+                        </div>
+                    </div>
+
+                    <!-- Quick Info Badges -->
+                    <div class="mt-6 flex flex-wrap justify-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-300">
+                        <span class="px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <i class="fa-solid fa-cake-candles text-slate-400 mr-1.5"></i> อายุ 19 ปี
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <i class="fa-solid fa-location-dot text-slate-400 mr-1.5"></i> กาฬสินธุ์
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Bio Column -->
+                <div class="md:col-span-7 space-y-6 text-center md:text-left">
+                    <div>
+                        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-200/80 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 border border-slate-300/50 dark:border-slate-700/50 mb-3">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
+                            Graphic Designer / Illustrator & Health Sciences
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white tracking-tight">
+                            กาญญาภา เหล่าโรง
+                        </h1>
+                        <p class="text-lg text-slate-600 dark:text-slate-400 font-medium mt-1">
+                            Kanyada Laorong (แจน)
+                        </p>
+                    </div>
+
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-base">
+                        มุ่งมั่นและมีความตั้งใจในการเรียนรู้ พร้อมต่อยอดทักษะความคิดสร้างสรรค์ด้าน **Graphic Design & Illustration** รวมถึงความสนใจในด้าน **สายงานสุขภาพและการบริการสังคม** มีความตั้งใจและมีความรับผิดชอบต่องาน พร้อมเปิดรับโอกาสในการพัฒนาศักยภาพตนเองอย่างต่อเนื่อง
+                    </p>
+
+                    <!-- Personal Information Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-sm text-slate-600 dark:text-slate-400">
+                        <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 flex items-center space-x-3">
+                            <i class="fa-solid fa-phone text-slate-400 dark:text-slate-500"></i>
+                            <span class="font-mono text-slate-900 dark:text-slate-200">065-618-6790</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 flex items-center space-x-3 overflow-hidden">
+                            <i class="fa-solid fa-envelope text-slate-400 dark:text-slate-500"></i>
+                            <span class="truncate text-slate-900 dark:text-slate-200">kayyadahelarong@gmail.com</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 flex items-center space-x-3 sm:col-span-2">
+                            <i class="fa-solid fa-house text-slate-400 dark:text-slate-500 flex-shrink-0"></i>
+                            <span class="text-slate-900 dark:text-slate-200">256 หมู่ 8 ต.โคกเครือ อ.หนองกุงศรี จ.กาฬสินธุ์</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="pt-2 flex flex-wrap gap-3 justify-center md:justify-start">
+                        <button onclick="copyEmail()" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-white text-white dark:text-slate-900 font-medium text-sm transition-all shadow-md">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> ติดต่อผ่านอีเมล
+                        </button>
+                        <a href="tel:0656186790" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium text-sm border border-slate-200 dark:border-slate-800 transition-all shadow-sm">
+                            <i class="fa-solid fa-phone mr-2 text-slate-500"></i> โทร 065-618-6790
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="scroll-mt-20">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">ประวัติการศึกษา</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Education Background</p>
+                </div>
+            </div>
+
+            <div class="relative border-l-2 border-slate-200 dark:border-slate-800 ml-5 space-y-8">
+                <!-- High School -->
+                <div class="relative pl-6 sm:pl-8 group">
+                    <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-slate-900 dark:bg-slate-100 ring-4 ring-slate-50 dark:ring-slate-950 group-hover:scale-125 transition-transform"></div>
+                    <div class="minimal-card bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">การศึกษาระดับมัธยมศึกษาตอนปลาย (ม.ปลาย)</h3>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 w-fit">
+                                GPA 3.25
+                            </span>
+                        </div>
+                        <p class="text-base font-semibold text-slate-700 dark:text-slate-300">โรงเรียนหนองชุมแสงวิทยาคม</p>
+                        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                            มุ่งเน้นการศึกษาในสายวิชาการ การพัฒนาศักยภาพส่วนบุคคล และการเตรียมความพร้อมเข้าสู่ระดับอุดมศึกษา
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Junior High School -->
+                <div class="relative pl-6 sm:pl-8 group">
+                    <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-slate-400 dark:bg-slate-600 ring-4 ring-slate-50 dark:ring-slate-950 group-hover:scale-125 transition-transform"></div>
+                    <div class="minimal-card bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">การศึกษาระดับมัธยมศึกษาตอนต้น (ม.ต้น)</h3>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 w-fit">
+                                GPA 3.67
+                            </span>
+                        </div>
+                        <p class="text-base font-semibold text-slate-700 dark:text-slate-300">โรงเรียนหนองศรีวิทยาคม</p>
+                        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                            ผลการเรียนอยู่ในเกณฑ์ดีเยี่ยม ร่วมกิจกรรมโรงเรียนอย่างสม่ำเสมอ
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience & Volunteer Section -->
+        <section id="experience" class="scroll-mt-20">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">ประสบการณ์และกิจกรรม</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Experience & Volunteer Work</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Activity 1 -->
+                <div class="minimal-card bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-hospital text-lg"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">กิจกรรมจิตอาสา</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">งานจิตอาสาโรงพยาบาล</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
+                            เข้าร่วมกิจกรรมจิตอาสาบริการสังคม ณ โรงพยาบาล ช่วยเหลือเจ้าหน้าที่ในการอำนวยความสะดวก ให้คำแนะนำเบื้องต้นแก่ผู้ป่วยและผู้มารับบริการ ฝึกฝนทักษะการสื่อสาร ความเห็นอกเห็นใจ และการทำงานร่วมกับผู้อื่น
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                        <span><i class="fa-solid fa-heart mr-1 text-rose-500"></i> บริการสังคม</span>
+                        <span class="font-medium text-slate-700 dark:text-slate-300">ช่วงเวลาว่าง / วันหยุด</span>
+                    </div>
+                </div>
+
+                <!-- Activity 2 -->
+                <div class="minimal-card bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-pen-nib text-lg"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">งานสร้างสรรค์</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">Graphic Design & Illustration</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
+                            ออกแบบกราฟิก ออกแบบภาพวาดประกอบ (Illustration) จัดทำสื่อประชาสัมพันธ์ และสร้างสรรค์ชิ้นงานตามโจทย์อย่างมีระเบียบ จัดวางองค์ประกอบ สื่อสารสาระสำคัญอย่างชัดเจน
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                        <span><i class="fa-solid fa-palette mr-1 text-indigo-500"></i> ความคิดสร้างสรรค์</span>
+                        <span class="font-medium text-slate-700 dark:text-slate-300">ผลงานส่วนตัว</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="scroll-mt-20">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white flex items-center justify-center font-bold text-lg">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">ทักษะและความสามารถ</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">Skills & Abilities</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Skill 1 -->
+                <div class="minimal-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex items-start space-x-4">
+                    <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex-shrink-0">
+                        <i class="fa-solid fa-list-check text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">มีความรับผิดชอบสูง</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">ใส่ใจรายละเอียด ส่งงานตรงเวลา ละเอียดรอบคอบ</p>
+                    </div>
+                </div>
+
+                <!-- Skill 2 -->
+                <div class="minimal-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex items-start space-x-4">
+                    <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex-shrink-0">
+                        <i class="fa-solid fa-palette text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">Graphic & Illustration</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">การออกแบบกราฟิก ภาพวาด จัดวางเลย์เอาต์</p>
+                    </div>
+                </div>
+
+                <!-- Skill 3 -->
+                <div class="minimal-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex items-start space-x-4">
+                    <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex-shrink-0">
+                        <i class="fa-solid fa-music text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">การเล่นดนตรี</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">ฝึกสมาธิ ความคิดสร้างสรรค์ สุนทรียภาพ</p>
+                    </div>
+                </div>
+
+                <!-- Skill 4 -->
+                <div class="minimal-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex items-start space-x-4">
+                    <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex-shrink-0">
+                        <i class="fa-solid fa-person-running text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">ทักษะด้านกีฬาและการวิ่ง</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">สุขภาพแข็งแรง มีความอดทนและระเบียบวินัย</p>
+                    </div>
+                </div>
+
+                <!-- Skill 5 -->
+                <div class="minimal-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex items-start space-x-4">
+                    <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex-shrink-0">
+                        <i class="fa-solid fa-users text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">การทำงานร่วมกับผู้อื่น</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">มีมนุษยสัมพันธ์ดี พร้อมเรียนรู้สิ่งใหม่ๆ</p>
+                    </div>
+                </div>
+
+                <!-- Skill 6 -->
+                <div class="minimal-card bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex items-start space-x-4">
+                    <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white flex-shrink-0">
+                        <i class="fa-solid fa-hand-holding-medical text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">จิตสาธารณะ</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">มีจิตอาสา ช่วยเหลือสังคมและผู้อื่น</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="scroll-mt-20">
+            <div class="bg-slate-900 dark:bg-slate-900 border border-slate-800 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+                <div class="max-w-3xl space-y-6 relative z-10">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-paper-plane text-emerald-400"></i>
+                        <span>Contact & Communication</span>
+                    </div>
+                    
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">
+                        สนใจติดต่อ หรือสอบถามข้อมูลเพิ่มเติม
+                    </h2>
+                    
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        ยินดีต้อนรับสำหรับการติดต่อประสานงาน หรือสอบถามข้อมูลประวัติและผลงาน สามารถติดต่อได้ตามช่องทางด้านล่างนี้ค่ะ
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-sm">
+                        <div class="flex items-center space-x-3 text-slate-300">
+                            <i class="fa-solid fa-phone w-6 text-slate-400 text-lg"></i>
+                            <span class="font-mono">065-618-6790</span>
+                        </div>
+                        <div class="flex items-center space-x-3 text-slate-300">
+                            <i class="fa-solid fa-envelope w-6 text-slate-400 text-lg"></i>
+                            <span class="truncate">kayyadahelarong@gmail.com</span>
+                        </div>
+                        <div class="flex items-center space-x-3 text-slate-300 sm:col-span-2">
+                            <i class="fa-solid fa-location-dot w-6 text-slate-400 text-lg flex-shrink-0"></i>
+                            <span>256 หมู่ 8 ต.โคกเครือ อ.หนองกุงศรี จ.กาฬสินธุ์</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex flex-wrap gap-3">
+                        <button onclick="copyEmail()" class="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-semibold text-sm transition-all shadow-md flex items-center space-x-2">
+                            <i class="fa-solid fa-copy"></i>
+                            <span>คัดลอกอีเมล</span>
+                        </button>
+                        <a href="mailto:kayyadahelarong@gmail.com" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold text-sm transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>ส่งอีเมลทันที</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-8 text-xs text-slate-500 dark:text-slate-400 transition-colors">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>© <span id="current-year"></span> Kanyada Laorong. All rights reserved.</p>
+            <p class="flex items-center space-x-1">
+                <span>Minimal Academic Portfolio | Powered by</span>
+                <a href="https://pages.github.com/" target="_blank" class="text-slate-800 dark:text-slate-200 font-medium hover:underline">GitHub Pages</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Client-side Interactive Scripts -->
+    <script>
+        // Set dynamic current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Dark/Light Theme Switching Logic
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+
+        // Mobile Navigation Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Toast Notification Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Copy Email to Clipboard safely
+        function copyEmail() {
+            const email = "kayyadahelarong@gmail.com";
+            const tempInput = document.createElement("input");
+            tempInput.value = email;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            showToast("คัดลอกอีเมล kayyadahelarong@gmail.com เรียบร้อยแล้ว!");
+        }
+    </script>
+</body>
+</html>
